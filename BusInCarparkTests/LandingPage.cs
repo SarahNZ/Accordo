@@ -1,11 +1,17 @@
-﻿using NUnit.Framework;
+﻿using System;
+//using OpenQA.Selenium.dotNetSeleniumExtras
+using NUnit.Framework;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
+using OpenQA.Selenium.Interactions;
 using OpenQA.Selenium.Support.UI;
 
 namespace BusInCarparkTests {
-    public class CarparkPage
+    public class LandingPage
     {
+
+        private static LandingPage _instance;
+        
         // Create a new instance of Chrome Driver
         private IWebDriver _driver = new ChromeDriver();
 
@@ -17,6 +23,10 @@ namespace BusInCarparkTests {
         public const string YCoordinateSelectControlLocator = "#positionY";
         public const string FacingControlLocator = "#face .custom-select";
         public const string PlaceBusButton = "btn-block";
+        public const string MoveButtonLocator = ".btn-group #move";
+        public const string LeftButton = "rotate-left";
+        public const string RightButton = "rotate-right";
+        public const string ReportButton = "report";
         public const string Carpark = "park";
 
         // Locators of co-ordinates of the bus in the carpark (where pos-0-0 is the south-western most cell of the carpark)
@@ -32,16 +42,27 @@ namespace BusInCarparkTests {
         public const string East = "face-east";
         public const string West = "face-west";
 
+        public static LandingPage GetInstance()
+        {
+            if (_instance == null)
+                _instance = new LandingPage();
+            return _instance;
+        }
+
         /// <summary>
         /// This method loads the landing page and makes sure the page is loaded.
         /// </summary>
         /// <returns>An instance of the Chrome Driver</returns>
         public IWebDriver LoadPage() {
-            _driver.Navigate().Refresh();
             _driver.Manage().Window.Maximize();
             _driver.Navigate().GoToUrl(LandingPageUrl);
             _driver.FindElement(By.ClassName(Carpark));
             return _driver;
+        }
+
+        public void RefreshPage()
+        {
+            _driver.Navigate().Refresh();
         }
 
         // Click on the Place Bus button to place the bus on a grid co-ordinate in the carpark, then check that it has been placed at the correct co-ordinate
@@ -70,6 +91,19 @@ namespace BusInCarparkTests {
 
             // Select Y Co-ordinate by value 
             selectElementY.SelectByValue("1");
+        }
+
+        public void Move()
+        {
+            new WebDriverWait(_driver, TimeSpan.FromSeconds(1000)).Until(SeleniumExtras.WaitHelpers.ExpectedConditions
+                .VisibilityOfAllElementsLocatedBy(By.Id("move")));
+            _driver.FindElement(By.CssSelector(MoveButtonLocator)).Click();
+
+        }
+
+        public void Report()
+        {
+            Assert.IsTrue(_driver.FindElement(By.Id(ReportButton)).Displayed);
         }
 
 
