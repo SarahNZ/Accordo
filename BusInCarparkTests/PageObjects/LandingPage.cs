@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Drawing.Text;
+using System.Runtime.CompilerServices;
 using NUnit.Framework;
 using NUnit.Framework.Constraints;
 using OpenQA.Selenium;
@@ -75,6 +78,7 @@ namespace BusInCarparkTests {
         {
             _driver.FindElement(By.ClassName(PlaceBusButton)).Click();
             Assert.IsTrue(_driver.FindElement(By.ClassName(coordinates)).Displayed,"The bus has been placed at the wrong co-ordinates in the carpark. It should have been placed at co-ordinate "+ coordinates + ".");
+            Console.WriteLine("The bus has been placed at the correct co-ordinates in the carpark. I.e. " + coordinates + ".");
         }
 
         public void SelectXAndYCoordinates(string x, string y)
@@ -86,7 +90,7 @@ namespace BusInCarparkTests {
             var selectElementX = new SelectElement(xCoordinateControl);
 
             // Select X Co-ordinate by value
-            selectElementX.SelectByValue("0");
+            selectElementX.SelectByValue(x);
 
             //Select the Y Coordinate drop-down list
             var yCoordinateControl = _driver.FindElement(By.CssSelector(YCoordinateSelectControlLocator));
@@ -95,7 +99,7 @@ namespace BusInCarparkTests {
             var selectElementY = new SelectElement(yCoordinateControl);
 
             // Select Y Co-ordinate by value 
-            selectElementY.SelectByValue("1");
+            selectElementY.SelectByValue(y);
         }
 
         public void Move()
@@ -106,8 +110,12 @@ namespace BusInCarparkTests {
 
         }
 
-        public void Report()
+        public void Report(int x, int y, string direction)
         {
+            int expectedX = x;
+            int expectedY = y;
+            string expectedDirection = direction.ToLower();
+
             // Step 1: Wait for the report button to be visible
             new WebDriverWait(_driver, TimeSpan.FromSeconds(1000)).Until(SeleniumExtras.WaitHelpers.ExpectedConditions
                 .VisibilityOfAllElementsLocatedBy(By.Id(ReportButton))); 
@@ -116,10 +124,16 @@ namespace BusInCarparkTests {
             _driver.FindElement(By.Id(ReportButton)).Click();   
 
             // Step 3: Check that a success message is displayed and the content re: the position of the bus is correct
-            _driver.FindElement(By.ClassName("alert alert-success"));
+            _driver.FindElement(By.ClassName("alert-success"));
 
-            //Assert.IsTrue();
+            // Get the entire success message
+            string successMessage = _driver.FindElement(By.CssSelector("div.alert")).Text;
+            Console.WriteLine("Success message is "+ successMessage + ".");
 
+            // Check to see if the x and y co-ordinates and the direction the bus is facing in the message is what you expect
+            Assert.IsTrue(successMessage.Contains("X: " + expectedX), "The x co-ordinate in the success message is incorrect.");
+            Assert.IsTrue(successMessage.Contains("Y: " + expectedY), "The y co-ordinate in the success message is incorrect");
+            Assert.IsTrue(successMessage.Contains("facing " + expectedDirection), "The direction in the success message is incorrect");
         }
 
         public void QuitWebDriver() {

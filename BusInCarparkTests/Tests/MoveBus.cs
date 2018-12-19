@@ -6,5 +6,7 @@ using System.Threading.Tasks;
 
 namespace BusInCarparkTests.Tests {
     public class MoveBus {
+
+
     }
 }

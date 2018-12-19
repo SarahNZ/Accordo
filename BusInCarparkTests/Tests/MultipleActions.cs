@@ -13,8 +13,13 @@ namespace BusInCarparkTests.Tests {
             LandingPage.GetInstance().Move();
 
             // Step 3: Report generated
-            LandingPage.GetInstance().Report();
+            LandingPage.GetInstance().Report(0,1,"North");
+        }
 
+        [TearDown]
+        // All browser windows associated with the driver are closed and the session safely ended after each test
+        public void Quit() {
+            LandingPage.GetInstance().QuitWebDriver();
         }
     }
 }
