@@ -1,18 +1,15 @@
 ﻿using System;
-//using OpenQA.Selenium.dotNetSeleniumExtras
 using NUnit.Framework;
+using NUnit.Framework.Constraints;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
-using OpenQA.Selenium.Interactions;
 using OpenQA.Selenium.Support.UI;
 
 namespace BusInCarparkTests {
     public class LandingPage
     {
-
         private static LandingPage _instance;
-        
-        // Create a new instance of Chrome Driver
+
         private IWebDriver _driver = new ChromeDriver();
 
         // URL of application's landing page
@@ -23,7 +20,7 @@ namespace BusInCarparkTests {
         public const string YCoordinateSelectControlLocator = "#positionY";
         public const string FacingControlLocator = "#face .custom-select";
         public const string PlaceBusButton = "btn-block";
-        public const string MoveButtonLocator = ".btn-group #move";
+        public const string MoveButton = "move";
         public const string LeftButton = "rotate-left";
         public const string RightButton = "rotate-right";
         public const string ReportButton = "report";
@@ -45,7 +42,15 @@ namespace BusInCarparkTests {
         public static LandingPage GetInstance()
         {
             if (_instance == null)
+            {
                 _instance = new LandingPage();
+            }
+            return _instance;
+        }
+
+        public static LandingPage NewInstance()
+        {
+            _instance = new LandingPage();
             return _instance;
         }
 
@@ -96,16 +101,29 @@ namespace BusInCarparkTests {
         public void Move()
         {
             new WebDriverWait(_driver, TimeSpan.FromSeconds(1000)).Until(SeleniumExtras.WaitHelpers.ExpectedConditions
-                .VisibilityOfAllElementsLocatedBy(By.Id("move")));
-            _driver.FindElement(By.CssSelector(MoveButtonLocator)).Click();
+                .VisibilityOfAllElementsLocatedBy(By.Id(MoveButton)));
+            _driver.FindElement(By.Id(MoveButton)).Click();
 
         }
 
         public void Report()
         {
-            Assert.IsTrue(_driver.FindElement(By.Id(ReportButton)).Displayed);
+            // Step 1: Wait for the report button to be visible
+            new WebDriverWait(_driver, TimeSpan.FromSeconds(1000)).Until(SeleniumExtras.WaitHelpers.ExpectedConditions
+                .VisibilityOfAllElementsLocatedBy(By.Id(ReportButton))); 
+
+            // Step 2: Click on the report button
+            _driver.FindElement(By.Id(ReportButton)).Click();   
+
+            // Step 3: Check that a success message is displayed and the content re: the position of the bus is correct
+            _driver.FindElement(By.ClassName("alert alert-success"));
+
+            //Assert.IsTrue();
+
         }
 
-
+        public void QuitWebDriver() {
+            _driver.Quit();
+        }
     }
 }
