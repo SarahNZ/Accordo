@@ -9,9 +9,9 @@ using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Support.UI;
 
 namespace BusInCarparkTests {
-    public class LandingPage
+    public class SinglePage
     {
-        private static LandingPage _instance;
+        private static SinglePage _instance;
 
         private IWebDriver _driver = new ChromeDriver();
 
@@ -21,7 +21,7 @@ namespace BusInCarparkTests {
         // Locators
         public const string XCoordinateSelectControlLocator = "#positionX";
         public const string YCoordinateSelectControlLocator = "#positionY";
-        public const string FacingControlLocator = "#face .custom-select";
+        public const string DirectionControlLocator = "#face";
         public const string PlaceBusButton = "btn-block";
         public const string MoveButton = "move";
         public const string LeftButton = "rotate-left";
@@ -32,9 +32,7 @@ namespace BusInCarparkTests {
         // Locators of co-ordinates of the bus in the carpark (where pos-0-0 is the south-western most cell of the carpark)
         public const string CoordinateX0Y0Locator = "pos-0-0";
         public const string CoordinateX0Y1Locator = "pos-0-1";
-        public const string CoordinateX0Y2Locator = "pos-0-2";
-        public const string CoordinateX0Y3Locator = "pos-0-3";
-        public const string CoordinateX0Y4Locator = "pos-0-4";
+        public const string CoordinateX1Y2Locator = "pos-1-2";
 
         // Direction the bus is facing. This dictates which way the bus will move in.
         public const string North = "face-north";
@@ -42,18 +40,18 @@ namespace BusInCarparkTests {
         public const string East = "face-east";
         public const string West = "face-west";
 
-        public static LandingPage GetInstance()
+        public static SinglePage GetInstance()
         {
             if (_instance == null)
             {
-                _instance = new LandingPage();
+                _instance = new SinglePage();
             }
             return _instance;
         }
 
-        public static LandingPage NewInstance()
+        public static SinglePage NewInstance()
         {
-            _instance = new LandingPage();
+            _instance = new SinglePage();
             return _instance;
         }
 
@@ -78,28 +76,40 @@ namespace BusInCarparkTests {
         {
             _driver.FindElement(By.ClassName(PlaceBusButton)).Click();
             Assert.IsTrue(_driver.FindElement(By.ClassName(coordinates)).Displayed,"The bus has been placed at the wrong co-ordinates in the carpark. It should have been placed at co-ordinate "+ coordinates + ".");
-            Console.WriteLine("The bus has been placed at the correct co-ordinates in the carpark. I.e. " + coordinates + ".");
+            Console.WriteLine("The bus has been placed at the correct co-ordinates in the carpark. I.e. " + coordinates + direction + ".");
         }
 
         public void SelectXAndYCoordinates(string x, string y)
         {
-            //Select the X Co-ordinate drop-down list
+            // Select the x co-ordinate drop-down list
             var xCoordinateControl = _driver.FindElement(By.CssSelector(XCoordinateSelectControlLocator));
 
-            // Create select element object for X Co-ordinate
-            var selectElementX = new SelectElement(xCoordinateControl);
+            // Create select element object for x co-ordinate
+            var selectXElement = new SelectElement(xCoordinateControl);
 
-            // Select X Co-ordinate by value
-            selectElementX.SelectByValue(x);
+            // Select x co-ordinate by value
+            selectXElement.SelectByValue(x);
 
-            //Select the Y Coordinate drop-down list
+            //Select the y co-ordinate drop-down list
             var yCoordinateControl = _driver.FindElement(By.CssSelector(YCoordinateSelectControlLocator));
 
-            // Create select element object for Y Co-ordinate
-            var selectElementY = new SelectElement(yCoordinateControl);
+            // Create select element object for y co-ordinate
+            var selectYElement = new SelectElement(yCoordinateControl);
 
-            // Select Y Co-ordinate by value 
-            selectElementY.SelectByValue(y);
+            // Select y Co-ordinate by value 
+            selectYElement.SelectByValue(y);
+        }
+
+        public void SelectDirection(string facing)
+        {
+            // Select the Facing drop-down list
+            var directionControl = _driver.FindElement((By.CssSelector(SinglePage.DirectionControlLocator)));
+
+            // Create select element object for direction
+            var selectDirectionElement = new SelectElement(directionControl);
+
+            // Select direction by value
+            selectDirectionElement.SelectByValue(facing);
         }
 
         public void Move()
@@ -108,6 +118,19 @@ namespace BusInCarparkTests {
                 .VisibilityOfAllElementsLocatedBy(By.Id(MoveButton)));
             _driver.FindElement(By.Id(MoveButton)).Click();
 
+        }
+
+        public void RotateBusToLeft()
+        {
+            new WebDriverWait(_driver, TimeSpan.FromSeconds(1000)).Until(SeleniumExtras.WaitHelpers.ExpectedConditions
+                .VisibilityOfAllElementsLocatedBy(By.Id(LeftButton)));
+            _driver.FindElement(By.Id(LeftButton)).Click();
+        }
+
+        public void RotateBusToRight() {
+            new WebDriverWait(_driver, TimeSpan.FromSeconds(1000)).Until(SeleniumExtras.WaitHelpers.ExpectedConditions
+                .VisibilityOfAllElementsLocatedBy(By.Id(RightButton)));
+            _driver.FindElement(By.Id(RightButton)).Click();
         }
 
         public void Report(int x, int y, string direction)

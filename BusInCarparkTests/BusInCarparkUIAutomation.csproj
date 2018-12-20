@@ -71,13 +71,12 @@
     <Otherwise />
   </Choose>
   <ItemGroup>
-    <Compile Include="PageObjects\LandingPage.cs" />
+    <Compile Include="PageObjects\SinglePage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Tests\MoveAndRotateBus.cs" />
     <Compile Include="Tests\MoveBus.cs" />
-    <Compile Include="Tests\MultipleActions.cs" />
     <Compile Include="Tests\PlaceBus.cs" />
     <Compile Include="Tests\RotateBus.cs" />
-    <Compile Include="Utilities\Browser.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
