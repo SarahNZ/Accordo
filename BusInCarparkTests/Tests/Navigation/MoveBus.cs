@@ -10,16 +10,11 @@ namespace BusInCarparkTests.Tests.Navigation
     [TestFixture(typeof(InternetExplorerDriver))]
     public class MoveBus<TWebDriver> where TWebDriver : IWebDriver, new()
     {
-        private IWebDriver _driver;
-
         // Smoke Test: User scenario where the bus is placed in the default position in the carpark, then moved one unit. Test checks that the bus is placed and moved to the correct co-ordinate and the message displayed is correct
         [Test]
         public void PlaceBusInDefaultPositionThenMoveAndReport()
         {
-            // Create a new instance of the Selenium WebDriver
-            _driver = new TWebDriver();
-
-            // Step 1: Load the landing page
+            // Step 1: [Setup] Load the landing page
             new PlaceBus<TWebDriver>().PlaceBusInDefaultPosition();
 
             // Step 2: Move one unit
@@ -33,10 +28,7 @@ namespace BusInCarparkTests.Tests.Navigation
         [Test]
         public void BusCantExitCarpark()
         {
-            // Create a new instance of the Selenium WebDriver
-            _driver = new TWebDriver();
-
-            // Step 1: Load the landing page
+            // Step 1: [Setup] Load the landing page
             var singlePage = SinglePage<TWebDriver>.NewInstance();
             singlePage.LoadPage();
 
@@ -108,7 +100,7 @@ namespace BusInCarparkTests.Tests.Navigation
         // All browser windows associated with the driver are closed and the session safely ended after each test
         public void Quit()
         {
-            SinglePage<TWebDriver>.GetInstance().QuitWebDriver();
+            SinglePage<TWebDriver>.GetInstance().QuitDriver();
         }
     }
 }

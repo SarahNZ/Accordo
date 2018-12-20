@@ -10,15 +10,11 @@ namespace BusInCarparkTests.Tests.Navigation
     [TestFixture(typeof(InternetExplorerDriver))]
     public class MoveAndRotateBus<TWebDriver> where TWebDriver : IWebDriver, new()
     {
-        private IWebDriver _driver;
-
         // Smoke Test: User scenario where a sequence of different move and rotation actions are performed. Test checks the bus is in the correct x,y co-ordinate and facing the correct direction after each action. Also, checks the message displayed at the end is correct.
         [Test]
         public void PlaceBusInX1Y2EastPositionThenMoveAndRotateAndMoveAgainAndReport()
         {
-            // Create a new instance of the Selenium WebDriver
-            _driver = new TWebDriver();
-            // Step 1: Load the landing page
+            // Step 1: [Setup] Load the landing page
             var singlePage = SinglePage<TWebDriver>.NewInstance();
             singlePage.LoadPage();
 
@@ -52,7 +48,7 @@ namespace BusInCarparkTests.Tests.Navigation
         // All browser windows associated with the driver are closed and the session safely ended after each test
         public void Quit()
         {
-            SinglePage<TWebDriver>.GetInstance().QuitWebDriver();
+            SinglePage<TWebDriver>.GetInstance().QuitDriver();
         }
     }
 }

@@ -207,7 +207,7 @@ namespace BusInCarparkTests.PageObjects
                 "The direction in the success message is incorrect");
         }
 
-        public void QuitWebDriver()
+        public void QuitDriver()
         {
             _driver.Quit();
         }
