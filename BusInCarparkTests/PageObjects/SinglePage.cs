@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing.Text;
 using System.Runtime.CompilerServices;
+using System.Security.Cryptography.X509Certificates;
 using NUnit.Framework;
 using NUnit.Framework.Constraints;
 using OpenQA.Selenium;
@@ -92,7 +93,7 @@ namespace BusInCarparkTests {
             try {
                 Assert.IsTrue(_driver.FindElement(By.ClassName(coordinates)).Displayed, "The bus has been placed at the wrong co-ordinates in the carpark. It should have been placed at co-ordinate " + coordinates + ".");
                 Console.WriteLine("The bus has been placed at the correct co-ordinates in the carpark. I.e. " + coordinates + " " + direction + ".");
-            } catch (NoSuchElementException e) {
+            } catch (NoSuchElementException) {
                 Console.WriteLine("The bus has been placed or moved to the wrong co-ordinates in the carpark. I.e. The bus should be at " + coordinates + " " + direction + ". ");
                 throw;
             }
@@ -104,7 +105,7 @@ namespace BusInCarparkTests {
             {
                 Assert.IsTrue(_driver.FindElement(By.ClassName(coordinates)).Displayed, "The bus has been placed at the wrong co-ordinates in the carpark. It should have been placed at co-ordinate " + coordinates + ".");
             }
-            catch (NoSuchElementException e)
+            catch (NoSuchElementException)
             {
                 Console.WriteLine("The bus has been placed or moved to the wrong co-ordinates in the carpark. I.e. The bus should be at " + coordinates + " " + direction + ". ");
                 throw;
@@ -190,6 +191,14 @@ namespace BusInCarparkTests {
             Assert.IsTrue(successMessage.Contains("Y: " + expectedY), "The y co-ordinate in the success message is incorrect");
             Assert.IsTrue(successMessage.Contains("facing " + expectedDirection), "The direction in the success message is incorrect");
         }
+
+        // TODO: Fix issue with method below where WebDriver exception is thrown as $ is undefined
+        //public static void HideCursor()
+        //{
+        //    IWebDriver driver = new ChromeDriver();
+        //    IJavaScriptExecutor jSExecutor = (IJavaScriptExecutor) driver;
+        //    jSExecutor.ExecuteScript("$('body').css('caret-color', 'transparent')");
+        //}
 
         public void QuitWebDriver() {
             _driver.Quit();
