@@ -35,7 +35,7 @@ namespace BusInCarparkTests.Tests.Navigation
             // Step 2: Place the bus in the 0,0 (x,y) position in the carpark, facing north
             singlePage.ClickPlaceBusButton(SinglePage<TWebDriver>.CoordinateX0Y0Locator, SinglePage<TWebDriver>.North);
 
-            // Step 2: Move 5 positions north from starting position
+            // Step 3: Move 5 positions north from starting position
             SinglePage<TWebDriver>.GetInstance().Move();
             SinglePage<TWebDriver>.GetInstance().Move();
             SinglePage<TWebDriver>.GetInstance().Move();
@@ -43,11 +43,11 @@ namespace BusInCarparkTests.Tests.Navigation
             SinglePage<TWebDriver>.GetInstance().Move();
 
             // TODO: Remove hard-coding from x,y co-ordinate and direction locator
-            // Step 3: Check that the bus is located in the 4,4 (x,y) position of the carpark, facing east
+            // Step 4: Check that the bus is located in the 4,4 (x,y) position of the carpark, facing east
             singlePage.CheckBusIsInCorrectPosition(SinglePage<TWebDriver>.CoordinateX0Y4Locator,
                 SinglePage<TWebDriver>.North);
 
-            // Step 4: Rotate the bus right and then move 5 positions east
+            // Step 5: Rotate the bus right and then move 5 positions east
             SinglePage<TWebDriver>.GetInstance().RotateBusToRight();
             SinglePage<TWebDriver>.GetInstance().Move();
             SinglePage<TWebDriver>.GetInstance().Move();
@@ -55,11 +55,11 @@ namespace BusInCarparkTests.Tests.Navigation
             SinglePage<TWebDriver>.GetInstance().Move();
             SinglePage<TWebDriver>.GetInstance().Move();
 
-            // Step 5: Check that the bus is located in the 4,4 (x,y) position of the carpark, facing east
+            // Step 6: Check that the bus is located in the 4,4 (x,y) position of the carpark, facing east
             singlePage.CheckBusIsInCorrectPosition(SinglePage<TWebDriver>.CoordinateX4Y4Locator,
                 SinglePage<TWebDriver>.East);
 
-            // Step 6: Rotate the bus right and then move 5 positions south
+            // Step 7: Rotate the bus right and then move 5 positions south
             // BUG: Unable to move bus south at all from the 4,4 x,y co-ordinate position (manually or via automated test)
             SinglePage<TWebDriver>.GetInstance().RotateBusToRight();
             // TODO: Create loop for repeated functions
@@ -69,12 +69,12 @@ namespace BusInCarparkTests.Tests.Navigation
             SinglePage<TWebDriver>.GetInstance().Move();
             SinglePage<TWebDriver>.GetInstance().Move();
 
-            // Step 7: Check that the bus is located in the 4,0 (x,y) position of the carpark, facing east
+            // Step 8: Check that the bus is located in the 4,0 (x,y) position of the carpark, facing east
             SinglePage<TWebDriver>.GetInstance()
                 .CheckBusIsInCorrectPosition(SinglePage<TWebDriver>.CoordinateX4Y0Locator,
                     SinglePage<TWebDriver>.South);
 
-            // Step 8: Rotate the bus right and then move 5 positions west
+            // Step 9: Rotate the bus right and then move 5 positions west
             SinglePage<TWebDriver>.GetInstance().RotateBusToRight();
             SinglePage<TWebDriver>.GetInstance().Move();
             SinglePage<TWebDriver>.GetInstance().Move();
@@ -82,15 +82,15 @@ namespace BusInCarparkTests.Tests.Navigation
             SinglePage<TWebDriver>.GetInstance().Move();
             SinglePage<TWebDriver>.GetInstance().Move();
 
-            // Step 9: Check that the bus is located in the 0,0 (x,y) position of the carpark, facing west
+            // Step 10: Check that the bus is located in the 0,0 (x,y) position of the carpark, facing west
             SinglePage<TWebDriver>.GetInstance()
                 .CheckBusIsInCorrectPosition(SinglePage<TWebDriver>.CoordinateX0Y0Locator, SinglePage<TWebDriver>.West);
 
-            // Step 10: Rotate the bus right and then move 1 position north
+            // Step 11: Rotate the bus right and then move 1 position north
             SinglePage<TWebDriver>.GetInstance().RotateBusToRight();
             SinglePage<TWebDriver>.GetInstance().Move();
 
-            // Step 11: Check that the bus is located in the 0,1 (x,y) position of the carpark, facing north
+            // Step 12: Check that the bus is located in the 0,1 (x,y) position of the carpark, facing north
             SinglePage<TWebDriver>.GetInstance()
                 .CheckBusIsInCorrectPosition(SinglePage<TWebDriver>.CoordinateX0Y1Locator,
                     SinglePage<TWebDriver>.North);
