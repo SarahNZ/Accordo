@@ -4,12 +4,12 @@ using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.IE;
 using OpenQA.Selenium.Support.UI;
+using ExpectedConditions = SeleniumExtras.WaitHelpers.ExpectedConditions;
 
-namespace BusInCarparkTests.PageObjects {
-
+namespace BusInCarparkTests.PageObjects
+{
     [TestFixture(typeof(ChromeDriver))]
     [TestFixture(typeof(InternetExplorerDriver))]
-
     public class SinglePage<TWebDriver> where TWebDriver : IWebDriver, new()
     {
         private IWebDriver _driver;
@@ -32,6 +32,7 @@ namespace BusInCarparkTests.PageObjects {
 
         // Locators of co-ordinates of the bus in the carpark (where pos-0-0 is the south-western most cell of the carpark)
         public const string CoordinateX0Y0Locator = "pos-0-0";
+
         public const string CoordinateX0Y1Locator = "pos-0-1";
         public const string CoordinateX1Y2Locator = "pos-1-2";
         public const string CoordinateX0Y4Locator = "pos-0-4";
@@ -47,9 +48,7 @@ namespace BusInCarparkTests.PageObjects {
         public static SinglePage<TWebDriver> GetInstance()
         {
             if (_instance == null)
-            {
                 _instance = new SinglePage<TWebDriver>();
-            }
             return _instance;
         }
 
@@ -60,23 +59,28 @@ namespace BusInCarparkTests.PageObjects {
         }
 
 
-
         /// <summary>
-        /// This method loads the landing page and makes sure the page is loaded.
+        ///     This method loads the landing page and makes sure the page is loaded.
         /// </summary>
         /// <returns>An instance of the Chrome Driver</returns>
-        public IWebDriver LoadPage() {
+        public IWebDriver LoadPage()
+        {
             _driver = new TWebDriver();
             _driver.Manage().Window.Maximize();
             _driver.Navigate().GoToUrl(LandingPageUrl);
             _driver.FindElement(By.ClassName(Carpark));
             // Check that the Place Bus button is enabled
-            Assert.IsTrue(_driver.FindElement(By.ClassName(PlaceBusButton)).Enabled, "The Place Bus button is not enabled on initial page load. It should be.");
+            Assert.IsTrue(_driver.FindElement(By.ClassName(PlaceBusButton)).Enabled,
+                "The Place Bus button is not enabled on initial page load. It should be.");
             // Check that the other buttons are disabled
-            Assert.IsFalse(_driver.FindElement(By.Id(MoveButton)).Enabled, "The Move button is enabled. It should not be enabled on initial page load");
-            Assert.IsFalse(_driver.FindElement(By.Id(LeftButton)).Enabled, "The Left button is enabled. It should not be enabled on initial page load");
-            Assert.IsFalse(_driver.FindElement(By.Id(RightButton)).Enabled, "The Right button is enabled. It should not be enabled on initial page load");
-            Assert.IsFalse(_driver.FindElement(By.Id(ReportButton)).Enabled, "The Report button is enabled. It should not enabled on initial page load");
+            Assert.IsFalse(_driver.FindElement(By.Id(MoveButton)).Enabled,
+                "The Move button is enabled. It should not be enabled on initial page load");
+            Assert.IsFalse(_driver.FindElement(By.Id(LeftButton)).Enabled,
+                "The Left button is enabled. It should not be enabled on initial page load");
+            Assert.IsFalse(_driver.FindElement(By.Id(RightButton)).Enabled,
+                "The Right button is enabled. It should not be enabled on initial page load");
+            Assert.IsFalse(_driver.FindElement(By.Id(ReportButton)).Enabled,
+                "The Report button is enabled. It should not enabled on initial page load");
             // Return an instance of the Selenium Web Driver
             return _driver;
         }
@@ -85,11 +89,19 @@ namespace BusInCarparkTests.PageObjects {
         public void ClickPlaceBusButton(string coordinates, string direction)
         {
             _driver.FindElement(By.ClassName(PlaceBusButton)).Click();
-            try {
-                Assert.IsTrue(_driver.FindElement(By.ClassName(coordinates)).Displayed, "The bus has been placed at the wrong co-ordinates in the carpark. It should have been placed at co-ordinate " + coordinates + ".");
-                Console.WriteLine("The bus has been placed at the correct co-ordinates in the carpark. I.e. " + coordinates + " " + direction + ".");
-            } catch (NoSuchElementException) {
-                Console.WriteLine("The bus has been placed or moved to the wrong co-ordinates in the carpark. I.e. The bus should be at " + coordinates + " " + direction + ". ");
+            try
+            {
+                Assert.IsTrue(_driver.FindElement(By.ClassName(coordinates)).Displayed,
+                    "The bus has been placed at the wrong co-ordinates in the carpark. It should have been placed at co-ordinate " +
+                    coordinates + ".");
+                Console.WriteLine("The bus has been placed at the correct co-ordinates in the carpark. I.e. " +
+                                  coordinates + " " + direction + ".");
+            }
+            catch (NoSuchElementException)
+            {
+                Console.WriteLine(
+                    "The bus has been placed or moved to the wrong co-ordinates in the carpark. I.e. The bus should be at " +
+                    coordinates + " " + direction + ". ");
                 throw;
             }
         }
@@ -98,11 +110,15 @@ namespace BusInCarparkTests.PageObjects {
         {
             try
             {
-                Assert.IsTrue(_driver.FindElement(By.ClassName(coordinates)).Displayed, "The bus has been placed at the wrong co-ordinates in the carpark. It should have been placed at co-ordinate " + coordinates + ".");
+                Assert.IsTrue(_driver.FindElement(By.ClassName(coordinates)).Displayed,
+                    "The bus has been placed at the wrong co-ordinates in the carpark. It should have been placed at co-ordinate " +
+                    coordinates + ".");
             }
             catch (NoSuchElementException)
             {
-                Console.WriteLine("The bus has been placed or moved to the wrong co-ordinates in the carpark. I.e. The bus should be at " + coordinates + " " + direction + ". ");
+                Console.WriteLine(
+                    "The bus has been placed or moved to the wrong co-ordinates in the carpark. I.e. The bus should be at " +
+                    coordinates + " " + direction + ". ");
                 throw;
             }
         }
@@ -131,7 +147,7 @@ namespace BusInCarparkTests.PageObjects {
         public void SelectDirection(string facing)
         {
             // Select the Facing drop-down list
-            var directionControl = _driver.FindElement((By.CssSelector(DirectionControlLocator)));
+            var directionControl = _driver.FindElement(By.CssSelector(DirectionControlLocator));
 
             // Create select element object for direction
             var selectDirectionElement = new SelectElement(directionControl);
@@ -142,21 +158,21 @@ namespace BusInCarparkTests.PageObjects {
 
         public void Move()
         {
-            new WebDriverWait(_driver, TimeSpan.FromSeconds(1000)).Until(SeleniumExtras.WaitHelpers.ExpectedConditions
+            new WebDriverWait(_driver, TimeSpan.FromSeconds(1000)).Until(ExpectedConditions
                 .VisibilityOfAllElementsLocatedBy(By.Id(MoveButton)));
             _driver.FindElement(By.Id(MoveButton)).Click();
-
         }
 
         public void RotateBusToLeft()
         {
-            new WebDriverWait(_driver, TimeSpan.FromSeconds(1000)).Until(SeleniumExtras.WaitHelpers.ExpectedConditions
+            new WebDriverWait(_driver, TimeSpan.FromSeconds(1000)).Until(ExpectedConditions
                 .VisibilityOfAllElementsLocatedBy(By.Id(LeftButton)));
             _driver.FindElement(By.Id(LeftButton)).Click();
         }
 
-        public void RotateBusToRight() {
-            new WebDriverWait(_driver, TimeSpan.FromSeconds(1000)).Until(SeleniumExtras.WaitHelpers.ExpectedConditions
+        public void RotateBusToRight()
+        {
+            new WebDriverWait(_driver, TimeSpan.FromSeconds(1000)).Until(ExpectedConditions
                 .VisibilityOfAllElementsLocatedBy(By.Id(RightButton)));
             _driver.FindElement(By.Id(RightButton)).Click();
         }
@@ -169,26 +185,30 @@ namespace BusInCarparkTests.PageObjects {
             string expectedDirection = direction.ToLower();
 
             // Step 1: Wait for the report button to be visible
-            new WebDriverWait(_driver, TimeSpan.FromSeconds(1000)).Until(SeleniumExtras.WaitHelpers.ExpectedConditions
-                .VisibilityOfAllElementsLocatedBy(By.Id(ReportButton))); 
+            new WebDriverWait(_driver, TimeSpan.FromSeconds(1000)).Until(ExpectedConditions
+                .VisibilityOfAllElementsLocatedBy(By.Id(ReportButton)));
 
             // Step 2: Click on the report button
-            _driver.FindElement(By.Id(ReportButton)).Click();   
+            _driver.FindElement(By.Id(ReportButton)).Click();
 
             // Step 3: Check that a success message is displayed and the content re: the position of the bus is correct
             _driver.FindElement(By.ClassName("alert-success"));
 
             // Get the entire success message
             string successMessage = _driver.FindElement(By.CssSelector("div.alert")).Text;
-            Console.WriteLine("Success message is "+ successMessage + ".");
+            Console.WriteLine("Success message is " + successMessage + ".");
 
             // Check to see if the x and y co-ordinates and the direction the bus is facing in the message is what you expect
-            Assert.IsTrue(successMessage.Contains("X: " + expectedX), "The x co-ordinate in the success message is incorrect.");
-            Assert.IsTrue(successMessage.Contains("Y: " + expectedY), "The y co-ordinate in the success message is incorrect");
-            Assert.IsTrue(successMessage.Contains("facing " + expectedDirection), "The direction in the success message is incorrect");
+            Assert.IsTrue(successMessage.Contains("X: " + expectedX),
+                "The x co-ordinate in the success message is incorrect.");
+            Assert.IsTrue(successMessage.Contains("Y: " + expectedY),
+                "The y co-ordinate in the success message is incorrect");
+            Assert.IsTrue(successMessage.Contains("facing " + expectedDirection),
+                "The direction in the success message is incorrect");
         }
 
-        public void QuitWebDriver() {
+        public void QuitWebDriver()
+        {
             _driver.Quit();
         }
     }

@@ -73,13 +73,15 @@
   <ItemGroup>
     <Compile Include="PageObjects\SinglePage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Tests\Functional\MoveAndRotateBus.cs" />
-    <Compile Include="Tests\Functional\MoveBus.cs" />
-    <Compile Include="Tests\Functional\PlaceBus.cs" />
-    <Compile Include="Tests\Functional\RotateBus.cs" />
+    <Compile Include="Tests\Navigation\MoveAndRotateBus.cs" />
+    <Compile Include="Tests\Navigation\MoveBus.cs" />
+    <Compile Include="Tests\Navigation\PlaceBus.cs" />
+    <Compile Include="Tests\Navigation\RotateBus.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup />
   <Choose>

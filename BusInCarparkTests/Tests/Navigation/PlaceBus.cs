@@ -4,17 +4,18 @@ using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.IE;
 
-namespace BusInCarparkTests.Tests.Functional
+namespace BusInCarparkTests.Tests.Navigation
 {
     [TestFixture(typeof(ChromeDriver))]
     [TestFixture(typeof(InternetExplorerDriver))]
-    public class PlaceBus<TWebDriver> where TWebDriver : IWebDriver, new() {
-   
+    public class PlaceBus<TWebDriver> where TWebDriver : IWebDriver, new()
+    {
         private IWebDriver _driver;
 
         // Test checks that the bus is placed at the default position in the carpark when the Place Bus button is clicked (using default co-ordinates)
         [Test]
-        public void PlaceBusInDefaultPosition() {
+        public void PlaceBusInDefaultPosition()
+        {
             // Create a new instance of the Selenium WebDriver
             _driver = new TWebDriver();
 
@@ -52,7 +53,7 @@ namespace BusInCarparkTests.Tests.Functional
             _driver = new TWebDriver();
 
             // Step 1: Load the landing page
-            var singlePage = new SinglePage<TWebDriver>();
+            var singlePage = SinglePage<TWebDriver>.NewInstance();
             singlePage.LoadPage();
 
             // Step 2: Place the bus at coordinate X0Y1 (leave default direction as north), and check that it is actually placed in the correct position
