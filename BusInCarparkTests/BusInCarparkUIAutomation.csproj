@@ -77,7 +77,6 @@
     <Compile Include="Tests\Functional\MoveBus.cs" />
     <Compile Include="Tests\Functional\PlaceBus.cs" />
     <Compile Include="Tests\Functional\RotateBus.cs" />
-    <Compile Include="Tests\VisualTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

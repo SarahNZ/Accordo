@@ -10,7 +10,6 @@ namespace BusInCarparkTests.PageObjects {
     [TestFixture(typeof(ChromeDriver))]
     [TestFixture(typeof(InternetExplorerDriver))]
 
-    // TODO: Split out this large class into a few smaller ones
     public class SinglePage<TWebDriver> where TWebDriver : IWebDriver, new()
     {
         private IWebDriver _driver;
@@ -68,7 +67,6 @@ namespace BusInCarparkTests.PageObjects {
         /// <returns>An instance of the Chrome Driver</returns>
         public IWebDriver LoadPage() {
             _driver = new TWebDriver();
-            //_driver.Manage().Window.Maximize();
             _driver.Manage().Window.Maximize();
             _driver.Navigate().GoToUrl(LandingPageUrl);
             _driver.FindElement(By.ClassName(Carpark));
@@ -81,11 +79,6 @@ namespace BusInCarparkTests.PageObjects {
             Assert.IsFalse(_driver.FindElement(By.Id(ReportButton)).Enabled, "The Report button is enabled. It should not enabled on initial page load");
             // Return an instance of the Selenium Web Driver
             return _driver;
-        }
-
-        public void RefreshPage()
-        {
-            _driver.Navigate().Refresh();
         }
 
         // Click on the Place Bus button to place the bus on a grid co-ordinate in the carpark, then check that it has been placed at the correct co-ordinate
@@ -168,6 +161,7 @@ namespace BusInCarparkTests.PageObjects {
             _driver.FindElement(By.Id(RightButton)).Click();
         }
 
+        // This method compares the actual x and y co-ordinates and direction in the report (message) with the expected values
         public void Report(int x, int y, string direction)
         {
             int expectedX = x;
@@ -193,14 +187,6 @@ namespace BusInCarparkTests.PageObjects {
             Assert.IsTrue(successMessage.Contains("Y: " + expectedY), "The y co-ordinate in the success message is incorrect");
             Assert.IsTrue(successMessage.Contains("facing " + expectedDirection), "The direction in the success message is incorrect");
         }
-
-        // TODO: Fix issue with method below where WebDriver exception is thrown as $ is undefined
-        //public static void HideCursor()
-        //{
-        //    IWebDriver driver = new ChromeDriver();
-        //    IJavaScriptExecutor jSExecutor = (IJavaScriptExecutor) driver;
-        //    jSExecutor.ExecuteScript("$('body').css('caret-color', 'transparent')");
-        //}
 
         public void QuitWebDriver() {
             _driver.Quit();

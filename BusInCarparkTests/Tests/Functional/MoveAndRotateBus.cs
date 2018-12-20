@@ -19,11 +19,10 @@ namespace BusInCarparkTests.Tests.Functional {
             // Create a new instance of the Selenium WebDriver
             _driver = new TWebDriver();
             // Step 1: Load the landing page
-            var singlePage = new SinglePage<TWebDriver>();
+            var singlePage = SinglePage<TWebDriver>.NewInstance();
             singlePage.LoadPage();
 
             // Step 2: Place the bus in the carpark at the initial coordinate X1Y2 and face east
-            // TODO: Code Improvement - Convert int to string, so not hard-coded below
             string xString = "1";
             string yString = "2";
             string direction = "east";
@@ -33,7 +32,6 @@ namespace BusInCarparkTests.Tests.Functional {
             // TODO: Create Enum for directions and pass x and y values in to create locator rather than hard-coding it
             singlePage.ClickPlaceBusButton(SinglePage<TWebDriver>.CoordinateX1Y2Locator, SinglePage<TWebDriver>.East);
 
-            // TODO: Automated test fails at Step 3. Can't find the existing instance of the Single Page Class, so it creates one. A new browser window is opened with no URL. Not sure what's going on.
             // Step 3: Move one unit east
             SinglePage<TWebDriver>.GetInstance().Move();
 

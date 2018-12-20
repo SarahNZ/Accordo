@@ -1,6 +1,5 @@
 ﻿using BusInCarparkTests.PageObjects;
 using NUnit.Framework;
-using NUnit.Framework.Internal;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.IE;
@@ -59,7 +58,6 @@ namespace BusInCarparkTests.Tests.Functional
             // Step 2: Place the bus at coordinate X0Y1 (leave default direction as north), and check that it is actually placed in the correct position
             int x = 0;
             int y = 1;
-            // TODO: Code Improvement - Convert int to string, so not hard-coded below
             string xString = "0";
             string yString = "1";
 
