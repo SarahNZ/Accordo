@@ -13,9 +13,8 @@ namespace BusInCarparkTests.Tests
 
             // Step 2: Check that the bus is located in the 0,0 (x,y) position of the carpark, facing north
             singlePage.ClickPlaceBusButton(SinglePage.CoordinateX0Y0Locator, SinglePage.North);
-
-
         }
+
         // Test checks that the bus is placed at the default position in the carpark when the Place Bus button is clicked (using default co-ordinates) and the success message is correct
         [Test]
         public void PlaceBusInDefaultPositionAndReport()

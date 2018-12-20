@@ -9,6 +9,7 @@ using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Support.UI;
 
 namespace BusInCarparkTests {
+    // TODO: Find out how to access WebDriver in other classes, so I can split out this large class into a few smaller ones
     public class SinglePage
     {
         private static SinglePage _instance;
@@ -33,6 +34,9 @@ namespace BusInCarparkTests {
         public const string CoordinateX0Y0Locator = "pos-0-0";
         public const string CoordinateX0Y1Locator = "pos-0-1";
         public const string CoordinateX1Y2Locator = "pos-1-2";
+        public const string CoordinateX0Y4Locator = "pos-0-4";
+        public const string CoordinateX4Y4Locator = "pos-4-4";
+        public const string CoordinateX4Y0Locator = "pos-4-0";
 
         // Direction the bus is facing. This dictates which way the bus will move in.
         public const string North = "face-north";
@@ -55,6 +59,8 @@ namespace BusInCarparkTests {
             return _instance;
         }
 
+
+
         /// <summary>
         /// This method loads the landing page and makes sure the page is loaded.
         /// </summary>
@@ -63,6 +69,14 @@ namespace BusInCarparkTests {
             _driver.Manage().Window.Maximize();
             _driver.Navigate().GoToUrl(LandingPageUrl);
             _driver.FindElement(By.ClassName(Carpark));
+            // Check that the Place Bus button is enabled
+            Assert.IsTrue(_driver.FindElement(By.ClassName(PlaceBusButton)).Enabled, "The Place Bus button is not enabled on initial page load. It should be.");
+            // Check that the other buttons are disabled
+            Assert.IsFalse(_driver.FindElement(By.Id(MoveButton)).Enabled, "The Move button is enabled. It should not be enabled on initial page load");
+            Assert.IsFalse(_driver.FindElement(By.Id(LeftButton)).Enabled, "The Left button is enabled. It should not be enabled on initial page load");
+            Assert.IsFalse(_driver.FindElement(By.Id(RightButton)).Enabled, "The Right button is enabled. It should not be enabled on initial page load");
+            Assert.IsFalse(_driver.FindElement(By.Id(ReportButton)).Enabled, "The Report button is enabled. It should not enabled on initial page load");
+            // Return an instance of the Selenium Web Driver
             return _driver;
         }
 
@@ -75,8 +89,26 @@ namespace BusInCarparkTests {
         public void ClickPlaceBusButton(string coordinates, string direction)
         {
             _driver.FindElement(By.ClassName(PlaceBusButton)).Click();
-            Assert.IsTrue(_driver.FindElement(By.ClassName(coordinates)).Displayed,"The bus has been placed at the wrong co-ordinates in the carpark. It should have been placed at co-ordinate "+ coordinates + ".");
-            Console.WriteLine("The bus has been placed at the correct co-ordinates in the carpark. I.e. " + coordinates + direction + ".");
+            try {
+                Assert.IsTrue(_driver.FindElement(By.ClassName(coordinates)).Displayed, "The bus has been placed at the wrong co-ordinates in the carpark. It should have been placed at co-ordinate " + coordinates + ".");
+                Console.WriteLine("The bus has been placed at the correct co-ordinates in the carpark. I.e. " + coordinates + " " + direction + ".");
+            } catch (NoSuchElementException e) {
+                Console.WriteLine("The bus has been placed or moved to the wrong co-ordinates in the carpark. I.e. The bus should be at " + coordinates + " " + direction + ". ");
+                throw;
+            }
+        }
+
+        public void CheckBusIsInCorrectPosition(string coordinates, string direction)
+        {
+            try
+            {
+                Assert.IsTrue(_driver.FindElement(By.ClassName(coordinates)).Displayed, "The bus has been placed at the wrong co-ordinates in the carpark. It should have been placed at co-ordinate " + coordinates + ".");
+            }
+            catch (NoSuchElementException e)
+            {
+                Console.WriteLine("The bus has been placed or moved to the wrong co-ordinates in the carpark. I.e. The bus should be at " + coordinates + " " + direction + ". ");
+                throw;
+            }
         }
 
         public void SelectXAndYCoordinates(string x, string y)
