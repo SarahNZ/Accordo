@@ -1,17 +1,31 @@
 ﻿using NUnit.Framework;
+using BusInCarparkTests.PageObjects;
+using OpenQA.Selenium;
+using OpenQA.Selenium.Chrome;
+using OpenQA.Selenium.IE;
 
-namespace BusInCarparkTests.Tests {
-    public class RotateBus {
+namespace BusInCarparkTests.Tests.Functional {
+
+    [TestFixture(typeof(ChromeDriver))]
+    [TestFixture(typeof(InternetExplorerDriver))]
+
+    public class RotateBus<TWebDriver> where TWebDriver : IWebDriver, new() {
+
+        private IWebDriver _driver;
+
         // Test checks that when the bus is placed in the carpark in the default position and rotated to the left, it is facing the correct direction
         [Test]
         public void RotateBusToLeftInDefaultPosition()
         {
+            // Create a new instance of the Selenium WebDriver
+            _driver = new TWebDriver();
+
             // Step 1: Load the landing page
-            var singlePage = SinglePage.NewInstance();
+            var singlePage = SinglePage<TWebDriver>.NewInstance();
             singlePage.LoadPage();
 
             // Step 2: Check that the bus is located in the 0,0 (x,y) position of the carpark, facing north
-            singlePage.ClickPlaceBusButton(SinglePage.CoordinateX0Y0Locator, SinglePage.North);
+            singlePage.ClickPlaceBusButton(SinglePage<TWebDriver>.CoordinateX0Y0Locator, SinglePage<TWebDriver>.North);
 
             // Step 3: Rotate the bus to the left
             singlePage.RotateBusToLeft();
@@ -23,12 +37,16 @@ namespace BusInCarparkTests.Tests {
             // Test checks that when the bus is placed in the carpark in the default position and rotated to the right, it is facing the correct direction
             [Test]
             public void RotateBusToRightInDefaultPosition() {
+
+                // Create a new instance of the Selenium WebDriver
+                _driver = new TWebDriver();
+
                 // Step 1: Load the landing page
-                var singlePage = SinglePage.NewInstance();
+                var singlePage = SinglePage<TWebDriver>.NewInstance();
                 singlePage.LoadPage();
 
                 // Step 2: Check that the bus is located in the 0,0 (x,y) position of the carpark, facing north
-                singlePage.ClickPlaceBusButton(SinglePage.CoordinateX0Y0Locator, SinglePage.North);
+                singlePage.ClickPlaceBusButton(SinglePage<TWebDriver>.CoordinateX0Y0Locator, SinglePage<TWebDriver>.North);
 
                 // Step 3: Rotate the bus to the right
                 singlePage.RotateBusToRight();
@@ -40,7 +58,7 @@ namespace BusInCarparkTests.Tests {
             [TearDown]
         // All browser windows associated with the driver are closed and the session safely ended after each test
         public void Quit() {
-            SinglePage.GetInstance().QuitWebDriver();
+            SinglePage<TWebDriver>.GetInstance().QuitWebDriver();
         }
     }
 }

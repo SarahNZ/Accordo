@@ -1,15 +1,27 @@
-﻿using NUnit;
+﻿using BusInCarparkTests.PageObjects;
 using NUnit.Framework;
+using OpenQA.Selenium;
+using OpenQA.Selenium.Chrome;
+using OpenQA.Selenium.IE;
 
 namespace BusInCarparkTests.Tests {
-    public class VisualTests {
- 
+
+    [TestFixture(typeof(ChromeDriver))]
+    [TestFixture(typeof(InternetExplorerDriver))]
+
+    public class VisualTests<TWebDriver> where TWebDriver : IWebDriver, new() {
+
+        private IWebDriver _driver;
+
         // Visual Test to check that the carpark page UI hasn't changed in different screen sizes, representative of different devices
         // [Test]
         public void CarparkPageVisualCheck()
         {
+            // Create a new instance of the Selenium WebDriver
+            _driver = new TWebDriver();
+
             // Step 1: Load the landing page
-            var singlePage = SinglePage.NewInstance();
+            var singlePage = SinglePage<TWebDriver>.NewInstance();
             singlePage.LoadPage();
 
             // Step 2: Capture Screenshot and compare to baseline image

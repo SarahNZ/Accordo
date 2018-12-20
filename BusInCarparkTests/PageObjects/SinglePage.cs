@@ -1,21 +1,21 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Drawing.Text;
-using System.Runtime.CompilerServices;
-using System.Security.Cryptography.X509Certificates;
 using NUnit.Framework;
-using NUnit.Framework.Constraints;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
+using OpenQA.Selenium.IE;
 using OpenQA.Selenium.Support.UI;
 
-namespace BusInCarparkTests {
-    // TODO: Find out how to access WebDriver in other classes, so I can split out this large class into a few smaller ones
-    public class SinglePage
-    {
-        private static SinglePage _instance;
+namespace BusInCarparkTests.PageObjects {
 
-        private IWebDriver _driver = new ChromeDriver();
+    [TestFixture(typeof(ChromeDriver))]
+    [TestFixture(typeof(InternetExplorerDriver))]
+
+    // TODO: Split out this large class into a few smaller ones
+    public class SinglePage<TWebDriver> where TWebDriver : IWebDriver, new()
+    {
+        private IWebDriver _driver;
+
+        private static SinglePage<TWebDriver> _instance;
 
         // URL of application's landing page
         private const string LandingPageUrl = "https://accordo-it.github.io/carpark/";
@@ -45,18 +45,18 @@ namespace BusInCarparkTests {
         public const string East = "face-east";
         public const string West = "face-west";
 
-        public static SinglePage GetInstance()
+        public static SinglePage<TWebDriver> GetInstance()
         {
             if (_instance == null)
             {
-                _instance = new SinglePage();
+                _instance = new SinglePage<TWebDriver>();
             }
             return _instance;
         }
 
-        public static SinglePage NewInstance()
+        public static SinglePage<TWebDriver> NewInstance()
         {
-            _instance = new SinglePage();
+            _instance = new SinglePage<TWebDriver>();
             return _instance;
         }
 
@@ -67,6 +67,8 @@ namespace BusInCarparkTests {
         /// </summary>
         /// <returns>An instance of the Chrome Driver</returns>
         public IWebDriver LoadPage() {
+            _driver = new TWebDriver();
+            //_driver.Manage().Window.Maximize();
             _driver.Manage().Window.Maximize();
             _driver.Navigate().GoToUrl(LandingPageUrl);
             _driver.FindElement(By.ClassName(Carpark));
@@ -136,7 +138,7 @@ namespace BusInCarparkTests {
         public void SelectDirection(string facing)
         {
             // Select the Facing drop-down list
-            var directionControl = _driver.FindElement((By.CssSelector(SinglePage.DirectionControlLocator)));
+            var directionControl = _driver.FindElement((By.CssSelector(DirectionControlLocator)));
 
             // Create select element object for direction
             var selectDirectionElement = new SelectElement(directionControl);
